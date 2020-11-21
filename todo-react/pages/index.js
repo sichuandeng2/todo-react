@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import ClockTest from './upd';
 import {
   ThemeProvider,
   Accordion,
@@ -13,53 +13,59 @@ import {
   EditablePreview,
   Flex,
   Text,
+  Button,
   Switch 
 } from "@chakra-ui/core";
+
 function HomePage() {
-  var toDoList = [
-    {
-      Id:1,
-      todo:"事務1",
-      finished:true
-    },
-    {
-      Id:2,
-      todo:"事務2",
-      finished:false
+
+
+   // 事务集合
+   const [constlist,setlist] = useState(
+      [{
+        Id:1,
+        todo:"事务1",
+        finshed:false
+      },
+      {
+        Id:2,
+        todo:"事务",
+        finshed:true
+      }]
+    );
+
+  // 添加事务
+  function addToDo(){
+    
+    var te = document.getElementById("btnAdd").innerText;
+    let item = {
+      Id:constlist.length+1,
+      todo:te,
+      finshed:false
     }
-  ]
-  const [count, setCount] = useState(toDoList);
+    setlist([...constlist,item]);
+  }
 
-
-
-  
   return (
-    <ThemeProvider >
-
-      {/* 標題欄 */}
+    <ThemeProvider>
+      {/* 标题栏 */}
       <Box>
-        <Box w="100%" h="60px"  backgroundColor="#1A202C" >
+        <Box w="100%" h="80px"  backgroundColor="#1A202C" >
           <Box w="60%" margin="auto" display="flex"  justifyContent="space-between" alignItems="center" >
             <Text fontSize="18px" color="#fff">ToDoList</Text>
-            <Editable defaultValue="添加ToDo" w="60%" h="24px" fontSize="18px"  backgroundColor="#E2E8F0" outline="none" rounded="5px" >
+            <Editable id="btnAdd" defaultValue="添加ToDo" w="60%" h="34px" fontSize="18px"  backgroundColor="#E2E8F0" outline="none" rounded="5px" >
               <EditablePreview />
               <EditableInput />
             </Editable>
-            {/* <button onClick={() =>setCount(count.push(1,"tet",true))}>
-              Click me
-            </button> */}
+            <Button variantColor="teal" variant="solid" onClick={addToDo}>
+              添加
+            </Button>
           </Box>
         </Box>
 
         {/* todo */}
-        <Box>
-            {/* 已完成 */}
-            <Box>
-              <ul>
-                <li></li>
-              </ul>
-            </Box>
-          
+        <Box>     
+          {constlist.map(item => <p key={item.Id}>{item.Id}----{item.todo}</p>)}
         </Box>
       </Box>
   </ThemeProvider >
