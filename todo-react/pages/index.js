@@ -31,9 +31,6 @@ function HomePage() {
   const [ToDoText,SetToDoText] = useState(0);   //编辑状态
 
 
-  const toast = useToast() 
-
-
   // 添加事务
   function AddToDo(){
     // 获取事务信息
@@ -60,21 +57,17 @@ function HomePage() {
   }
 
   // 编辑事务
-  function EditToDo(e,id){
+  function EditToDo(e,itemId,id){
     var value = ToDoText.target.value;
-    console.log(value ,constlist.todo)
-    if (value == constlist.todo){
-      if (value =="") {
-        alert("修改内容不能为空"); 
-        return false}
-      var l = constlist;
-      l.forEach(e=>{
-        if(e.Id == id)
-        e.todo = value;
-      })
-      setlist([...l]);
-      ToDoText.target.value="";
-    }
+    console.log(value ,constlist[id].todo)
+    if (value =="") {
+      alert("修改内容不能为空"); 
+      return false}
+    var tempe = constlist;
+    
+    tempe[id].todo = value
+    setlist([...tempe]);
+    ToDoText.target.value="";  
   }
 
 
@@ -84,12 +77,11 @@ function HomePage() {
       {/* 标题栏 */}
       <Box>
         <Box w="100%" h="80px" verticalAlign="80px" backgroundColor="#1A202C"  >
-          <Box w="60%" h="80px" verticalAlign="80px" margin="auto" display="flex"  justifyContent="space-between" alignContent="center" border="1px solid red">
+          <Box w="60%" h="80px" verticalAlign="80px" margin="auto" display="flex"  justifyContent="space-between" alignContent="center">
             <Text fontSize={26} color="#fff" >ToDoList</Text>
             <Box  display="flex" justifyContent="space-between" alignItems="center" >
               <Input ref={txtAdd} size="md" placeholder="点击添加ToDo" backgroundColor="#E2E8F0" outline="none"  ></Input>
               <Button variantColor="teal" variant="solid" onClick={AddToDo}>添加事务</Button>
-              <Text>删除</Text>
             </Box>
           </Box>
         </Box>
@@ -103,7 +95,7 @@ function HomePage() {
                   <p>
                     {index}----{item.todo}----{item.finshed?"开":"关"}
                   </p>
-                  <Button onClick={EditToDo.bind(this,"",item.Id)}>点击修改</Button>
+                  <Button onClick={EditToDo.bind(this,"",item.Id,index)}>点击修改</Button>
                   <Button onClick={DeleteToDo.bind(this,"",index)}>点击删除</Button>
                 </Flex>
               )
