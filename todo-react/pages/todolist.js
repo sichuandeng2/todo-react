@@ -1,4 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, createContext } from 'react'
+// import { MdAccountBox } from 'react-icons/md'
+
 import {
   Box,
   Text,
@@ -6,7 +8,8 @@ import {
   Flex,
   Input,
   useToast,
-  Switch
+  Switch,
+  
 } from 'viviui'
 
 function HomePage () {
@@ -28,19 +31,7 @@ function HomePage () {
   const txtAdd = useRef(null) // 添加dom对象
   const forEach = useRef(null) // 添加dom对象
   const toast = useToast()
-
-  // useEffect(() => {
-  //   conList.forEach(e => {
-  //     const cEl = forEach.current
-  //     if (cEl) {
-  //       if (e.finshed) {
-  //         cEl.style.backgroundColor = '#666'
-  //       } else {
-  //         cEl.style.backgroundColor = '#ddd'
-  //       }
-  //     }
-  //   })
-  // }, [conList])
+ 
 
   // 添加事务
   function AddToDo () {
@@ -92,20 +83,9 @@ function HomePage () {
   // 改变事务状态
   function ChangesFinshed (e, index) {
     const el = document.getElementById('switch' + index).checked
-    const cEl = document.getElementById('flex' + index)
-    changeSt(el, cEl)
     const temp = conList
     temp[index].finshed = el
-
     setlist([...temp])
-  }
-
-  function changeSt (el, cEl) {
-    if (el) {
-      cEl.style.background = '#666'
-    } else {
-      cEl.style.background = '#ddd'
-    }
   }
 
   // 模态弹出层
@@ -141,8 +121,8 @@ function HomePage () {
               <Box key={index} display='flex' justifyContent='space-between' margin='auto' w={1200}>
                 <Flex ref={forEach} id={'flex' + index}>
                   <Input id={'input' + index} w={180} />
-                  <Box flexShrink='1' w={600}>
-                    {index}----{item.todo}----{item.finshed ? '已完成' : '未完成'}
+                  <Box  w={600}>
+                    <Box style={{background:(item.finshed) ?'#ddd':'#999'} }>{index}----{item.todo}----{item.finshed ? '已完成' : '未完成'}</Box>
                   </Box>
                 </Flex>
                 <Box justifyContent='space-between'>
@@ -150,14 +130,11 @@ function HomePage () {
                   <Button id={'btn' + index} onClick={EditToDo.bind(this, '', index)} display='inline'>点击修改</Button>
                   <Button onClick={DeleteToDo.bind(this, '', index)} display='inline'>点击删除</Button>
                 </Box>
-
               </Box>
             )
           })}
           <hr />
-          {/* <ToDo /> */}
         </Box>
-
       </Box>
     </>
   )
