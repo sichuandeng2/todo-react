@@ -7,9 +7,8 @@ import {
   Switch,
   Flex,
   Input,
-  useToast
 } from "@chakra-ui/core"
-
+// import {ToDo} from "../components/ToDo.js"
 
 function HomePage() {
 
@@ -28,46 +27,61 @@ function HomePage() {
 
   const [constlist,setlist] = useState(data);   //数据源
   const txtAdd = useRef(null);                  //添加dom对象
-  const [ToDoText,SetToDoText] = useState(0);   //编辑状态
-
+  // const [ToDoText,SetToDoText] = useState(0);   //编辑状态
+  // const [EditBtn,SetEditBtn] = useState(null);
 
   // 添加事务
   function AddToDo(){
     // 获取事务信息
     var te = txtAdd.current.value;
     if (te ===''|| te ==='点击添加ToDo') {
-      alert("请输入添加内容");
+      alert("添加内容不能为空，请输入添加内容。");
       return;
     }
+    
+
+    txtAdd.current.value = "";
     // 构建数据模型
     let item = {
-      Id:constlist.length+1,
+      Id:constlist.length+10001,
       todo:te,
       finshed:false
     }
-    setlist([...constlist,item]);
-    txtAdd.current.value="";
+    let temp = constlist;
+    temp.push(item);
+    console.log(temp);
+    setlist([...temp]);
+
+  
   }
 
   // 删除事务
   function DeleteToDo(e,params){
-    var temp = constlist;
-    temp.splice(params,1);
-    setlist([...temp]);
+
+    if (confirm("您确定要删除"+constlist[params].todo))
+    {
+      var temp = constlist;
+
+      temp.splice(params,1);
+      setlist([...temp]);
+      console.log(setlist);
+    }
+    console.log(constlist);
   }
 
   // 编辑事务
   function EditToDo(e,itemId,id){
-    var value = ToDoText.target.value;
-    console.log(value ,constlist[id].todo)
-    if (value =="") {
+
+    let inputEl = document.getElementById("input"+id)
+    var value = inputEl.value;
+    if (value == "") {
       alert("修改内容不能为空"); 
       return false}
     var tempe = constlist;
-    
     tempe[id].todo = value
     setlist([...tempe]);
-    ToDoText.target.value="";  
+    // ToDoText.target.value="";  
+    inputEl.value="";
   }
 
 
@@ -91,17 +105,17 @@ function HomePage() {
           {constlist.map((item,index) => {
               return (
                 <Flex justify="Left" align="center" margin="auto" w={800} key={item.Id}>
-                  <Input w={180} onChange={inner=>SetToDoText(inner)}></Input>
+                  {/* <Input  id={"input"+index} w={180} onChange={inner=>SetToDoText(inner)}></Input> */}
+                  <Input  id={"input"+index} w={180}></Input>
                   <p>
                     {index}----{item.todo}----{item.finshed?"开":"关"}
                   </p>
-                  <Button onClick={EditToDo.bind(this,"",item.Id,index)}>点击修改</Button>
+                  <Button id={"btn"+index} onClick={EditToDo.bind(this,"",item.Id,index)}>点击修改</Button>
                   <Button onClick={DeleteToDo.bind(this,"",index)}>点击删除</Button>
                 </Flex>
               )
           })}
         </Box>
-
       </Box>
   </ThemeProvider >
   )
