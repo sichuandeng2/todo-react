@@ -18,6 +18,7 @@
     "react-dom": "^17.0.1",
     "react-icons": "^3.11.0",
     "reacticons": "0.0.1",
+    "standard": "^16.0.3",
     "viviui": "^1.7.3"
   }
 }
