@@ -14,13 +14,11 @@ function HomePage() {
 
    // 模拟数据源
    let data =  [{
-      Id:1,
       todo:"事务1",
       finshed:false
     },
     {
-      Id:2,
-      todo:"事务",
+      todo:"事务2",
       finshed:true
     }]
 
@@ -38,12 +36,11 @@ function HomePage() {
       alert("添加内容不能为空，请输入添加内容。");
       return;
     }
-    
+
 
     txtAdd.current.value = "";
     // 构建数据模型
     let item = {
-      Id:constlist.length+10001,
       todo:te,
       finshed:false
     }
@@ -51,8 +48,6 @@ function HomePage() {
     temp.push(item);
     console.log(temp);
     setlist([...temp]);
-
-  
   }
 
   // 删除事务
@@ -61,7 +56,6 @@ function HomePage() {
     if (confirm("您确定要删除"+constlist[params].todo))
     {
       var temp = constlist;
-
       temp.splice(params,1);
       setlist([...temp]);
       console.log(setlist);
@@ -70,7 +64,7 @@ function HomePage() {
   }
 
   // 编辑事务
-  function EditToDo(e,itemId,id){
+  function EditToDo(e,id){
 
     let inputEl = document.getElementById("input"+id)
     var value = inputEl.value;
@@ -104,13 +98,13 @@ function HomePage() {
         <Box>    
           {constlist.map((item,index) => {
               return (
-                <Flex justify="Left" align="center" margin="auto" w={800} key={item.Id}>
+                <Flex justify="Left" align="center" margin="auto" w={800} key={index}>
                   {/* <Input  id={"input"+index} w={180} onChange={inner=>SetToDoText(inner)}></Input> */}
                   <Input  id={"input"+index} w={180}></Input>
                   <p>
-                    {index}----{item.todo}----{item.finshed?"开":"关"}
+                    {index}----{item.todo}----{item.finshed?"已完成":"未完成"}
                   </p>
-                  <Button id={"btn"+index} onClick={EditToDo.bind(this,"",item.Id,index)}>点击修改</Button>
+                  <Button id={"btn"+index} onClick={EditToDo.bind(this,"",index)}>点击修改</Button>
                   <Button onClick={DeleteToDo.bind(this,"",index)}>点击删除</Button>
                 </Flex>
               )
