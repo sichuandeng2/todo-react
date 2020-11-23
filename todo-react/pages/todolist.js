@@ -18,6 +18,10 @@ function HomePage () {
   {
     todo: '事务2',
     finshed: true
+  },
+  {
+    todo: '事务2',
+    finshed: false
   }]
 
   const [conList, setlist] = useState(data) // 数据源
@@ -25,18 +29,18 @@ function HomePage () {
   const forEach = useRef(null) // 添加dom对象
   const toast = useToast()
 
-  useEffect(() => {
-    conList.forEach(e => {
-      const cEl = forEach.current
-      if (cEl) {
-        if (e.finshed) {
-          cEl.style.backgroundColor = '#666'
-        } else {
-          cEl.style.backgroundColor = '#ddd'
-        }
-      }
-    })
-  }, [conList])
+  // useEffect(() => {
+  //   conList.forEach(e => {
+  //     const cEl = forEach.current
+  //     if (cEl) {
+  //       if (e.finshed) {
+  //         cEl.style.backgroundColor = '#666'
+  //       } else {
+  //         cEl.style.backgroundColor = '#ddd'
+  //       }
+  //     }
+  //   })
+  // }, [conList])
 
   // 添加事务
   function AddToDo () {
@@ -134,19 +138,23 @@ function HomePage () {
         <Box>
           {conList.map((item, index) => {
             return (
-              <Flex ref={forEach} id={'flex' + index} justifyContent='space-between' margin='auto' w={800} key={index}>
-                <Input id={'input' + index} w={180} />
-                <p>
-                  {index}----{item.todo}----{item.finshed ? '已完成' : '未完成'}
-                </p>
-                <Switch id={'switch' + index} size='md' onChange={ChangesFinshed.bind('', '', index)} isChecked={item.finshed} />
-                <Button id={'btn' + index} onClick={EditToDo.bind(this, '', index)}>点击修改</Button>
-                <Button onClick={DeleteToDo.bind(this, '', index)}>点击删除</Button>
-              </Flex>
+              <Box key={index} display='flex' justifyContent='space-between' margin='auto' w={1200}>
+                <Flex ref={forEach} id={'flex' + index}>
+                  <Input id={'input' + index} w={180} />
+                  <Box flexShrink='1' w={600}>
+                    {index}----{item.todo}----{item.finshed ? '已完成' : '未完成'}
+                  </Box>
+                </Flex>
+                <Box justifyContent='space-between'>
+                  <Switch id={'switch' + index} size='md' onChange={ChangesFinshed.bind('', '', index)} isChecked={item.finshed} />
+                  <Button id={'btn' + index} onClick={EditToDo.bind(this, '', index)} display='inline'>点击修改</Button>
+                  <Button onClick={DeleteToDo.bind(this, '', index)} display='inline'>点击删除</Button>
+                </Box>
+
+              </Box>
             )
           })}
           <hr />
-
           {/* <ToDo /> */}
         </Box>
 
