@@ -10,6 +10,7 @@ function HomePage () {
   return (
     <ThemeProvider theme={theme}>
       <CSSReset />
+
       <Todolist />
     </ThemeProvider>
   )

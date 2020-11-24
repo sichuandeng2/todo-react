@@ -1,37 +1,26 @@
-import React, { useState, useRef, useEffect, createContext } from 'react'
-// import { MdAccountBox } from 'react-icons/md'
-
+import React, { useRef } from 'react'
+import ExchangeRates from '../components/Client'
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider
+} from '@apollo/client'
 import {
   Box,
   Text,
   Button,
-  Flex,
   Input,
-  useToast,
-  Switch,
-  
+  useToast
 } from 'viviui'
 
 function HomePage () {
-  // 模拟数据源
-  const data = [{
-    todo: '事务1',
-    finshed: false
-  },
-  {
-    todo: '事务2',
-    finshed: true
-  },
-  {
-    todo: '事务2',
-    finshed: false
-  }]
-
-  const [conList, setlist] = useState(data) // 数据源
   const txtAdd = useRef(null) // 添加dom对象
-  const forEach = useRef(null) // 添加dom对象
-  const toast = useToast()
- 
+  const toast = useToast() // 弹出层
+  // 请求连接
+  const client = new ApolloClient({
+    uri: 'http://localhost:4000/',
+    cache: new InMemoryCache()
+  })
 
   // 添加事务
   function AddToDo () {
@@ -39,55 +28,8 @@ function HomePage () {
     const te = txtAdd.current.value
     if (te === '' || te === '点击添加ToDo') {
       popAlert('添加')
-      return
     }
-
-    // 构建数据模型
-    const item = {
-      todo: te,
-      finshed: false
-    }
-    const temp = conList
-    temp.push(item)
-    setlist([...temp])
-    txtAdd.current.value = ''
   }
-
-  // 删除事务
-  function DeleteToDo (e, params) {
-    const IsDelete = confirm('您确定要删除' + conList[params].todo)
-    if (IsDelete) {
-      const temp = conList
-      temp.splice(params, 1)
-      setlist([...temp])
-      console.log(setlist)
-    }
-    console.log(conList)
-  }
-
-  // 编辑事务
-  function EditToDo (e, id) {
-    const inputEl = document.getElementById('input' + id)
-    const value = inputEl.value
-    if (value === '') {
-      popAlert('编辑')
-      return false
-    }
-
-    const tempe = conList
-    tempe[id].todo = value
-    setlist([...tempe])
-    inputEl.value = ''
-  }
-
-  // 改变事务状态
-  function ChangesFinshed (e, index) {
-    const el = document.getElementById('switch' + index).checked
-    const temp = conList
-    temp[index].finshed = el
-    setlist([...temp])
-  }
-
   // 模态弹出层
   function popAlert (inner) {
     toast({
@@ -99,7 +41,6 @@ function HomePage () {
       isClosable: true
     })
   }
-
   return (
     <>
       {/* 标题栏 */}
@@ -116,23 +57,9 @@ function HomePage () {
 
         {/* 事务信息 */}
         <Box>
-          {conList.map((item, index) => {
-            return (
-              <Box key={index} display='flex' justifyContent='space-between' margin='auto' w={1200}>
-                <Flex ref={forEach} id={'flex' + index}>
-                  <Input id={'input' + index} w={180} />
-                  <Box  w={600}>
-                    <Box style={{background:(item.finshed) ?'#ddd':'#999'} }>{index}----{item.todo}----{item.finshed ? '已完成' : '未完成'}</Box>
-                  </Box>
-                </Flex>
-                <Box justifyContent='space-between'>
-                  <Switch id={'switch' + index} size='md' onChange={ChangesFinshed.bind('', '', index)} isChecked={item.finshed} />
-                  <Button id={'btn' + index} onClick={EditToDo.bind(this, '', index)} display='inline'>点击修改</Button>
-                  <Button onClick={DeleteToDo.bind(this, '', index)} display='inline'>点击删除</Button>
-                </Box>
-              </Box>
-            )
-          })}
+          <ApolloProvider client={client}>
+            <ExchangeRates />
+          </ApolloProvider>
           <hr />
         </Box>
       </Box>
